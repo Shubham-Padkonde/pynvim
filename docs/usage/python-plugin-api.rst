@@ -38,7 +38,7 @@ same way, but python will not wait for it to finish, so the return value is
 unavailable.
 
 Windows and tabpages
--------------------
+--------------------
 
 ``vim.windows`` contains the windows in the current tabpage, matching Vim's
 Python interface. A saved reference to this sequence follows the current tab
