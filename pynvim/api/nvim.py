@@ -129,7 +129,9 @@ class Nvim:
         self.vvars = RemoteMap(self, 'nvim_get_vvar', None, None)
         self.options = RemoteMap(self, 'nvim_get_option', 'nvim_set_option')
         self.buffers = Buffers(self)
-        self.windows: RemoteSequence[Window] = RemoteSequence(self, 'nvim_list_wins')
+        self.windows: RemoteSequence[Window] = RemoteSequence(
+            self, 'nvim_tabpage_list_wins', 0
+        )
         self.tabpages: RemoteSequence[Tabpage] = RemoteSequence(
             self, 'nvim_list_tabpages'
         )

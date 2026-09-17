@@ -37,6 +37,15 @@ to instead send a msgpack notification. Nvim will execute the API method the
 same way, but python will not wait for it to finish, so the return value is
 unavailable.
 
+Windows and tabpages
+-------------------
+
+``vim.windows`` contains the windows in the current tabpage, matching Vim's
+Python interface. A saved reference to this sequence follows the current tab
+when switching tabs. In contrast, ``tabpage.windows`` remains bound to that
+specific tabpage. To list windows across all tabpages, use
+``vim.api.list_wins()``.
+
 Vimscript functions: ``vim.funcs``
 ----------------------------------
 

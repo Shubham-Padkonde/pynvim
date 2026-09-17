@@ -87,11 +87,12 @@ def test_position(vim: Nvim) -> None:
 
 
 def test_tabpage(vim: Nvim) -> None:
+    first_window = vim.current.window
     vim.command('tabnew')
     vim.command('vsplit')
-    assert vim.windows[0].tabpage == vim.tabpages[0]
+    assert first_window.tabpage == vim.tabpages[0]
+    assert vim.windows[0].tabpage == vim.tabpages[1]
     assert vim.windows[1].tabpage == vim.tabpages[1]
-    assert vim.windows[2].tabpage == vim.tabpages[1]
 
 
 def test_valid(vim: Nvim) -> None:

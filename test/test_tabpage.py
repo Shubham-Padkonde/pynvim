@@ -4,13 +4,14 @@ from pynvim.api import Nvim
 
 
 def test_windows(vim: Nvim) -> None:
+    first_window = vim.current.window
     vim.command('tabnew')
     vim.command('vsplit')
-    assert list(vim.tabpages[0].windows) == [vim.windows[0]]
-    assert list(vim.tabpages[1].windows) == [vim.windows[1], vim.windows[2]]
+    assert list(vim.tabpages[0].windows) == [first_window]
+    assert list(vim.tabpages[1].windows) == [vim.windows[0], vim.windows[1]]
+    assert vim.tabpages[1].window == vim.windows[0]
+    vim.current.window = vim.windows[1]
     assert vim.tabpages[1].window == vim.windows[1]
-    vim.current.window = vim.windows[2]
-    assert vim.tabpages[1].window == vim.windows[2]
 
 
 def test_vars(vim: Nvim) -> None:

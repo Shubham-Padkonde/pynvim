@@ -181,16 +181,16 @@ class RemoteSequence(Generic[T]):
 
     For example, the 'windows' property of the `Nvim` class is a RemoteSequence
     sequence instance, and the expression `nvim.windows[0]` is translated to
-    session.request('nvim_list_wins')[0].
+    session.request('nvim_tabpage_list_wins', 0)[0].
 
     One important detail about this class is that all methods will fetch the
     sequence into a list and perform the necessary manipulation
     locally(iteration, indexing, counting, etc).
     """
 
-    def __init__(self, session: IRemote, method: str):
-        """Initialize a RemoteSequence with session, method."""
-        self._fetch = functools.partial(session.request, method)
+    def __init__(self, session: IRemote, method: str, *args: Any):
+        """Initialize a RemoteSequence with session, method and arguments."""
+        self._fetch = functools.partial(session.request, method, *args)
 
     def __len__(self) -> int:
         """Return the length of the remote sequence."""

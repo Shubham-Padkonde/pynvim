@@ -201,15 +201,43 @@ def test_windows(vim: Nvim) -> None:
     assert vim.windows[1] == vim.current.window
 
 
+def test_windows_follow_current_tabpage(vim: Nvim) -> None:
+    windows = vim.windows
+    first_tab = vim.current.tabpage
+    first_window = vim.current.window
+    vim.command('tabnew')
+    vim.command('vsplit')
+    second_tab = vim.current.tabpage
+    second_windows = list(second_tab.windows)
+
+    assert list(windows) == second_windows
+    assert len(windows) == 2
+    assert windows[0] == second_windows[0]
+    assert windows[:] == second_windows
+    assert first_window not in windows
+    assert list(first_tab.windows) == [first_window]
+
+    vim.current.tabpage = first_tab
+    assert list(windows) == [first_window]
+    assert len(windows) == 1
+    assert first_window in windows
+    assert list(second_tab.windows) == second_windows
+
+    vim.current.tabpage = second_tab
+    vim.command('tabclose')
+    assert list(windows) == [first_window]
+
+
 def test_tabpages(vim: Nvim) -> None:
     assert len(vim.tabpages) == 1
     assert vim.tabpages[0] == vim.current.tabpage
+    first_window = vim.current.window
     vim.command('tabnew')
     assert len(vim.tabpages) == 2
-    assert len(vim.windows) == 2
-    assert vim.windows[1] == vim.current.window
+    assert len(vim.windows) == 1
+    assert vim.windows[0] == vim.current.window
     assert vim.tabpages[1] == vim.current.tabpage
-    vim.current.window = vim.windows[0]
+    vim.current.window = first_window
     # Switching window also switches tabpages if necessary(this probably
     # isn't the current behavior, but compatibility will be handled in the
     # python client with an optional parameter)
@@ -217,7 +245,7 @@ def test_tabpages(vim: Nvim) -> None:
     assert vim.windows[0] == vim.current.window
     vim.current.tabpage = vim.tabpages[1]
     assert vim.tabpages[1] == vim.current.tabpage
-    assert vim.windows[1] == vim.current.window
+    assert vim.windows[0] == vim.current.window
 
 
 def test_hash(vim: Nvim) -> None:
